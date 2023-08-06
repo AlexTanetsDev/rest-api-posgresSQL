@@ -9,15 +9,16 @@ const createUser = async (req, res) => {
   if (!emailPattern.test(email))
     res.status(400).json("Invalid email, check you enter");
 
-  const nevUserProfile = await db.query(
+  const profile = await db.query(
     "INSERT INTO profiles (firstName, lastName, state) VALUES ($1, $2, $3) RETURNING *",
     [firstName, lastName, state]
   );
-  const newUser = await db.query(
+  const user = await db.query(
     "INSERT INTO users (userName, email, role, profileId) VALUES ($1, $2, $3,$4) RETURNING *",
-    [username, email, role, nevUserProfile[0].id]
+    [username, email, role, profile[0].id]
   );
-  res.status(201).json({ newUser, nevUserProfile });
+  const response = { profile: profile[0], user: user[0] };
+  res.status(201).json(response);
 };
 
 const getAllUsers = async (req, res) => {
