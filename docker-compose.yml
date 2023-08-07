@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    command: npm start
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    container_name: db
+    image: postgres:15.3-alpine
+    command:
+      - "postgres"
+      - "-c"
+      - "port=1818"
+    env_file:
+      - .env
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+      POSTGRES_USER: "alexdev"
+      POSTGRES_PASSWORD: "alexalex123"
+    ports:
+      - "1818:1818"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d
+    restart: always
+
+volumes:
+  pgdata:

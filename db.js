@@ -1,13 +1,13 @@
 const pgp = require("pg-promise")();
 require("dotenv").config();
-const { DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } = process.env;
+const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD } = process.env;
 
 const cn = {
-  host: "localhost",
-  port: 5432,
-  database: DATABASE_NAME,
-  user: DATABASE_USER,
-  password: DATABASE_PASSWORD,
+  host: "db",
+  port: 1818,
+  database: POSTGRES_DB,
+  user: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
 };
 
 const db = pgp(cn);
