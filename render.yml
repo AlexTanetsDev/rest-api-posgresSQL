@@ -1,0 +1,48 @@
+version: "1"
+services:
+  - name: main
+    startCommand: npm start
+    env:
+      - key: PG_DATA
+        fromFile: .env
+      - key: POSTGRES_USER
+        fromFile: .env
+      - key: POSTGRES_PASSWORD
+        fromFile: .env
+    instanceCount: 1
+    ports:
+      - 8000
+    envVars:
+      NODE_ENV: production
+    dependsOn:
+      - name: db
+    healthCheck:
+      path: /
+      port: 8000
+      protocol: HTTP
+      timeoutSeconds: 5
+      intervalSeconds: 10
+      unhealthyThreshold: 5
+      healthyThreshold: 2
+
+  - name: db
+    image: postgres:15.3-alpine
+    startCommand: ["postgres", "-c", "port=1818"]
+    instanceCount: 1
+    ports:
+      - 1818
+    env:
+      - key: PG_DATA
+        value: /var/lib/postgresql/data
+      - key: POSTGRES_USER
+        value: "alexdev"
+      - key: POSTGRES_PASSWORD
+        value: "alexalex123"
+    volumeMounts:
+      - name: pgdata
+        mountPath: /var/lib/postgresql/data
+      - path: ./db/init.sql
+        mountPath: /docker-entrypoint-initdb.d
+
+volumes:
+  - name: pgdata
