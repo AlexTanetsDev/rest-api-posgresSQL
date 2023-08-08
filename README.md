@@ -2,9 +2,12 @@
 
 HI welcome to the REST API with PosgresSQL!
 
+FOR DEPLOY THIS APP YOU CAN USE DOCKER
+RUN "docker-compose up --build"
+
 REQUESTS EXAMPLE
 
-base url =
+base url = localhost:8000/api
 
 POST
 //adduser
